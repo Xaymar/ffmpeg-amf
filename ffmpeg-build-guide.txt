@@ -1,0 +1,40 @@
+Prerequisites
+- YASM 32 or 64-bit (Architecture dependent)
+- MSYS
+
+- Install steps -
+1. Download and extract YASM for the target architecture.
+2. Rename yasm-*.exe to yasm.exe.
+3. Install MSYS.
+4. Rename the link.exe inside the {MSYS Install Directory}/bin to _link.exe. (Skips some later steps)
+
+- Build Enviroment steps -
+1. Open a new cmd from inside Visual Studio 2015 (Tools > External Tools)
+2. Navigate to '..\..\VC'.
+3. 32-bit: Execute 'vcvarsall.bat x86' (Cross-Compiling from AMD64 to x86: amd64_x86)
+3. 64-bit: Execute 'vcvarsall.bat amd64' (Cross-Compiling from x86 to AMD64: x86_amd64)
+4. Navigate to {MSYS Install Directory}.
+5. Execute msys.bat, it should open a fully configured shell.
+
+- libx264 Build steps -
+1. Grab the current stable source.
+2. Using the above shell, navigate to the stable source.
+3. CC=cl configure --prefix={FFMPEG Shared Path} --enable-shared --extra-cflags="-DNO_PREFIX"
+4. make
+5. make install-lib-shared
+6. Navigate to {FFMPEG Shared Path}/lib and rename libx264.dll.lib to libx264.lib.
+
+- ffmpeg Build steps - 
+1. Follow this: https://trac.ffmpeg.org/wiki/CompilationGuide/MSVC
+2. Add the following extra commands to the configure command:
+	--extra-cflags='-I{FFMPEG Shared Path}\\include' (Path must be in linux format)
+	--extra-ldflags='-LIBPATH:"{FFMPEG Shared Path}\\lib"' (Path must be in windows format)
+	--enable-gpl
+	--enable-libx264
+3. make
+4. make install
+5. Copy the libx264-*.dll from {FFMPEG Shared Path}/bin to the ffmpeg output directory.
+
+./configure --prefix=/d/software/video/ffmpeg-vs2015-64bit --enable-shared --toolchain=msvc --enable-asm --enable-yasm --disable-doc --extra-cflags=-I/d/projects/C++/ffmpeg-shared/include --extra-ldflags='-LIBPATH:"D:\\Projects\\C++\\ffmpeg-shared\\lib"' --enable-gpl --enable-libx264 --enable-encoder=h264_vce --enable-lto
+
+./configure --prefix=/d/software/ffmpeg-vs2015-64bit --enable-asm --enable-yasm --toolchain=msvc --enable-shared --enable-gpl --enable-nonfree --enable-lto
