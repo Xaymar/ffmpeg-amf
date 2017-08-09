@@ -1,8 +1,38 @@
 Prerequisites
-- YASM 32 or 64-bit (Architecture dependent)
-- MSYS
+- MSYS2 (32 or 64 bit)
+- MSYS2 MingW
+- MSYS2 YASM
+- NASM from http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/ for x264 support.
 
-- Install steps -
+1. Prerequisite Setup
+1.1 MSYS 2
+- Install MSYS2 to any location, preferably without any spaces, slashes or other special symbols.
+- Open an MSYS2 shell and run 'pacman -Syu' (without ') and wait for it to finish. Close it when it asks for it.
+- Open an MSYS2 shell and run 'pacman -Su' (without '), wait for it to complete.
+1.2 MingW and YASM
+- Open an MSYS2 shell.
+- Run 'pacman -S make diffutils yasm mingw-w64-x86_64-gcc mingw-w64-i686-gcc mingw-w64-x86_64-gtk3 mingw-w64-i686-gtk3' (without ').
+- Done
+2. Building
+2.1 The Build Environment
+- Launch a "Visual Studio Native Toold Command Prompt".
+- Navigate to the MSYS2 installation directory.
+- Launch an msys2 shell with 'msys2_shell.cmd -full-path'
+- Verify that everything is correct using 'which link' and 'which cl' (they should be pointing to VS versions)
+2.2 Building
+- Using the previous shell, navigate to the ffmpeg build directory and run:
+  (MingW 32): './ffmpeg-build-win release 32'
+  (MingW 64): './ffmpeg-build-win release 64'
+  (VS 32): './ffmpeg-build-win release 32 msvc'
+  (VS 64): './ffmpeg-build-win release 64 msvc'
+- Wait until it's done.
+- Pick up your correctly built ffmpeg from /build and /redist.
+
+
+
+
+------------------------------------------
+
 1. Download and extract YASM for the target architecture.
 2. Rename yasm-*.exe to yasm.exe.
 3. Install MSYS.
@@ -14,7 +44,7 @@ Prerequisites
 3. 32-bit: Execute 'vcvarsall.bat x86' (Cross-Compiling from AMD64 to x86: amd64_x86)
 3. 64-bit: Execute 'vcvarsall.bat amd64' (Cross-Compiling from x86 to AMD64: x86_amd64)
 4. Navigate to {MSYS Install Directory}.
-5. Execute msys.bat, it should open a fully configured shell.
+5. 32-bit: Execute 'msys2_shell.cmd -mingw32', it should open a fully configured shell.
 
 - libx264 Build steps -
 1. Grab the current stable source.
@@ -34,7 +64,6 @@ Prerequisites
 3. make
 4. make install
 5. Copy the libx264-*.dll from {FFMPEG Shared Path}/bin to the ffmpeg output directory.
-
-./configure --prefix=/d/software/video/ffmpeg-vs2015-64bit --enable-shared --toolchain=msvc --enable-asm --enable-yasm --disable-doc --extra-cflags=-I/d/projects/C++/ffmpeg-shared/include --extra-ldflags='-LIBPATH:"D:\\Projects\\C++\\ffmpeg-shared\\lib"' --enable-gpl --enable-libx264 --enable-encoder=h264_vce --enable-lto
-
-./configure --prefix=/d/software/ffmpeg-vs2015-64bit --enable-asm --enable-yasm --toolchain=msvc --enable-shared --enable-gpl --enable-nonfree --enable-lto
+./configure --prefix=/d/Projects/Cpp/ffmpeg-shared --enable-asm --disable-doc --enable-gpl --enable-nonfree --enable-w32threads --extra-ldflags=-static-libgcc --enable-muxer=av1 --enable-parser=av1
+./configure --prefix=/d/Projects/Cpp/ffmpeg-shared --enable-shared --toolchain=msvc --enable-asm --enable-yasm --disable-doc --extra-cflags=-I/d/Projects/Cpp/ffmpeg-shared/include --extra-ldflags='-LIBPATH:"D:\\Projects\\Cpp\\ffmpeg-shared\\lib"' --enable-gpl --enable-libx264 --enable-encoder=h264_vce --enable-lto
+./configure --prefix=/d/Projects/Cpp/ffmpeg-shared --enable-asm --enable-yasm --toolchain=msvc --enable-shared --enable-gpl --enable-nonfree --enable-lto
