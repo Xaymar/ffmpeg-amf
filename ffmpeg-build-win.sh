@@ -12,10 +12,19 @@ build_redist=true
 # build_type: debug. release
 # bitness: 32, 64
 # toolchain: mingw, msvc 
+# incremental: full, inc
 
 build_type=$1
 bitness=$2
 toolchain=$3
+incremental=$4
+
+if [ "$incremental" = "" ]
+then
+   incremental="full"
+fi
+
+
 
 #--------------------------------------------------------
 # FOLDERS CONFIG
@@ -45,11 +54,15 @@ fi
 
 if [ "$toolchain" == "msvc" ]
 then
- fftoolchain=--toolchain=msvc
+ fftoolchain=--toolchain=msvc 
+ extracflags=--extra-cflags="-Zi"
+ extralinkflags=--extra-ldflags="-DEBUG"
  fldr_toolchain=msvc
 else
- fftoolchain=--extra-ldflags=-static-libgcc
+ fftoolchain=
+ extralinkflags=--extra-ldflags=-static-libgcc
  fldr_toolchain=mingw
+ extracflags=
 fi
 
 if test "$build_type" == "release"
@@ -63,6 +76,7 @@ else
 if [ "$toolchain" == "msvc" ]
 then
    debug_flags=--disable-debug
+
 fi
 fi
 
@@ -101,14 +115,19 @@ mkdir -p $fld_build_full_path
 
 cd $fld_build_full_path
 
-make clean
+if [ "$incremental" = "full" ]
+then
+    make clean
+fi
 
 #MSYS2 Win build
 
-$fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads $debug_flags
-
-
-make -j6
+if [ "$incremental" = "full" ]
+then
+   $fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads --enable-avresample $debug_flags $extracflags $extralinkflags
+fi
+#make -j6
+make
 
 fi #build_ffmpeg=true
 
