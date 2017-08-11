@@ -24,7 +24,6 @@ pacman -S mingw-w64-i686-gtk3
 cd C:/MinGW/bin
 cp libintl-8.dll intl.dll
 
--- THESE CAN BE SKIPPED?
 12. in E:\msys64\mingw64\x86_64-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
 13. In E:\msys64\mingw64\lib rename libbz2.dll.a libz.dll.a libiconv.dll.a liblzma.dll.a optionally libSDL.dll.a 
 14. in E:\msys64\mingw32\i686-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
@@ -39,12 +38,12 @@ git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
 Build 64
 1. Run E:\msys64\msys2_shell.cmd -mingw64
 2. cd /e/dev/ffmpeg
-3. ./ffmpeg-build-win release 64
+3. ./ffmpeg-build-win.sh release 64
 
 Build 32
 1. Run E:\msys64\msys2_shell.cmd -mingw32
 2. cd /e/dev/ffmpeg
-3. ./ffmpeg-build-win release 32
+3. ./ffmpeg-build-win.sh release 32
 
 
 Build 64 with VC++
@@ -52,12 +51,15 @@ Build 64 with VC++
 2. Navigate to E:\msys64
 3. Run E:\msys64\msys2_shell.cmd -mingw64 -use-full-path
 4. Navigate to cd /e/dev/ffmpeg
-5. Run ./ffmpeg-build-win release 64 msvc
+5. Run ./ffmpeg-build-win.sh release 64 msvc
 
 Build 32 with VC++
 1. Run 32 bit VC env variable command prompt
 2. Navigate to E:\msys64
 3. Run E:\msys64\msys2_shell.cmd -mingw32 -use-full-path
 4. Navigate to cd /e/dev/ffmpeg
-5. Run ./ffmpeg-build-win release 32 msvc
+5. Run ./ffmpeg-build-win.sh release 32 msvc
 
+
+use "full" as a last parameter for full re-builds - default
+use "inc" as a last parameter for incremental builds
