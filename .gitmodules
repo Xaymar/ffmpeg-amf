@@ -1,0 +1,4 @@
+[submodule "ffmpeg"]
+	path = ffmpeg
+	url = git@github.com:Xaymar/ffmpeg.git
+	branch = amf-integration
