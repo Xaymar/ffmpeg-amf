@@ -11,6 +11,10 @@ pacman -S diffutils
 pacman -S yasm
 pacman -S mingw-w64-x86_64-gcc
 pacman -S mingw-w64-i686-gcc
+
+pacman -S mingw-w64-i686-gdb
+pacman -S mingw-w64-x86_64-gdb
+
 pacman -S mingw-w64-x86_64-gtk3
 pacman -S mingw-w64-i686-gtk3
 
