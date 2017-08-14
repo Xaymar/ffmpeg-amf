@@ -19,24 +19,36 @@ pacman -S mingw-w64-x86_64-gtk3
 pacman -S mingw-w64-i686-gtk3
 
 9. Download http://ftp.gnome.org/pub/gnome/binaries/win64/dependencies/pkg-config_0.23-2_win64.zip
-10. Unzip and copy pkg-config.exe to E:\msys64\mingw64\bin
+10. Unzip and copy pkg-config.exe to C:\msys64\mingw64\bin
 11. Download http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip
-12. Unzip and copy pkg-config.exe to E:\msys64\mingw32\bin
+12. Unzip and copy pkg-config.exe to C:\msys64\mingw32\bin
 
 
 11. Copy libintl-8.dll to intl.dll
-cd C:/MinGW/bin
+cd C:\msys64\bin
 cp libintl-8.dll intl.dll
 
-12. in E:\msys64\mingw64\x86_64-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
-13. In E:\msys64\mingw64\lib rename libbz2.dll.a libz.dll.a libiconv.dll.a liblzma.dll.a optionally libSDL.dll.a 
-14. in E:\msys64\mingw32\i686-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
-15. In E:\msys64\mingw32\lib rename libbz2.dll.a libz.dll.a libiconv.dll.a liblzma.dll.a optionally libSDL.dll.a 
+12. in C:\msys64\mingw64\x86_64-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
+13. In C:\msys64\mingw64\lib rename libbz2.dll.a libz.dll.a libiconv.dll.a liblzma.dll.a optionally libSDL.dll.a 
+14. in C:\msys64\mingw32\i686-w64-mingw32\lib rename libpthread.dll.a libwinpthread.dll.a, 
+15. In C:\msys64\mingw32\lib rename libbz2.dll.a libz.dll.a libiconv.dll.a liblzma.dll.a optionally libSDL.dll.a 
 
 
 Getting source code:
 1. In this directory:
 git clone https://git.ffmpeg.org/ffmpeg.git ffmpeg
+2. example of full path would be e:/dev/ffmpeg
+
+
+Optional to include x264 encoder:
+1. download nasm for 32 bit: http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win32/nasm-2.13.01-win32.zip
+2. unzip can copy nasm.exe into C:\msys64\mingw32\bin
+3. download nasm for 64 bit: http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win64/nasm-2.13.01-win64.zip
+4. unzip can copy nasm.exe into C:\msys64\mingw64\bin
+5. download latest x264 from here: https://www.videolan.org/developers/x264.html and put it into /e/dev/ffmpeg as /e/dev/ffmpeg/x264
+6. make build_x264=true in ffmpeg-build-win.sh
+7. make add_x264=true in ffmpeg-build-win.sh
+8. after first build can change build_x264=false to avoid x264 rebuild
 
 
 Build 64
@@ -53,14 +65,14 @@ Build 32
 Build 64 with VC++
 1. Run 64 bit VC env variable command prompt
 2. Navigate to E:\msys64
-3. Run E:\msys64\msys2_shell.cmd -mingw64 -use-full-path
+3. Run C:\msys64\msys2_shell.cmd -mingw64 -use-full-path
 4. Navigate to cd /e/dev/ffmpeg
 5. Run ./ffmpeg-build-win.sh release 64 msvc
 
 Build 32 with VC++
 1. Run 32 bit VC env variable command prompt
 2. Navigate to E:\msys64
-3. Run E:\msys64\msys2_shell.cmd -mingw32 -use-full-path
+3. Run C:\msys64\msys2_shell.cmd -mingw32 -use-full-path
 4. Navigate to cd /e/dev/ffmpeg
 5. Run ./ffmpeg-build-win.sh release 32 msvc
 
