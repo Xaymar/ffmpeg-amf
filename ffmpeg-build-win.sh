@@ -73,11 +73,11 @@ then
 else
    echo ++debug
 #MM --disable-optimizations cause link failures. FFMPEG uses if(0) foo(); construct to exclude foo() function from the build. MSVC doesn't remove call to foo() in debug mode.
-if [ "$toolchain" == "msvc" ]
-then
-   debug_flags=--disable-debug
-
-fi
+#if [ "$toolchain" == "msvc" ]
+#then
+#   debug_flags=--disable-debug
+#
+#fi
 fi
 
 #--------------------------------------------------------
