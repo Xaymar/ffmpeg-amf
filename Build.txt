@@ -47,8 +47,22 @@ Optional to include x264 encoder:
 4. unzip can copy nasm.exe into C:\msys64\mingw64\bin
 5. download latest x264 from here: https://www.videolan.org/developers/x264.html and put it into /e/dev/ffmpeg as /e/dev/ffmpeg/x264
 6. make build_x264=true in ffmpeg-build-win.sh
-7. make add_x264=true in ffmpeg-build-win.sh
+7. set add_x264=true in ffmpeg-build-win.sh
 8. after first build can change build_x264=false to avoid x264 rebuild
+
+
+Optional to include x265 encoder:
+1. download latest x265 from here: https://www.videolan.org/developers/x265.html and put it into /e/dev/ffmpeg as /e/dev/ffmpeg/x265
+2. install cmake 2.8.11 or later
+3. run E:\dev\ffmpeg\x265\build\vc12-x86_64\make-solutions.bat
+4. in cmake dialog point to C:\msys64\usr\bin\yasm.exe
+5. Click "Confugure" then "Generate" buttons
+6. Exit the dialog: x265.sln should be generated.
+7. Open x265.sln, select RelWithDebInfo configuration and build x265-shared project with dependencies.
+8. repeat 3-7 for E:\dev\ffmpeg\x265\build\vc12-x86\make-solutions.bat
+9. set add_x265=true in ffmpeg-build-win.sh
+
+
 
 
 Build 64
@@ -65,7 +79,7 @@ Build 32
 Build 64 with VC++
 1. Run 64 bit VC env variable command prompt
 2. Navigate to E:\msys64
-3. Run C:\msys64\msys2_shell.cmd -mingw64 -use-full-path
+3. Run C:\msys64\
 4. Navigate to cd /e/dev/ffmpeg
 5. Run ./ffmpeg-build-win.sh release 64 msvc
 

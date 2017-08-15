@@ -4,8 +4,10 @@
 
 build_ffmpeg=true
 build_redist=true
-build_x264=true
+build_x264=false
 add_x264=true
+add_x265=true
+
 
 
 
@@ -65,13 +67,15 @@ fi
 
 if [ "$toolchain" == "msvc" ]
 then
- fftoolchain=--toolchain=msvc 
- extracflags=--extra-cflags="-Zi"
- fldr_toolchain=msvc
+    fftoolchain=--toolchain=msvc 
+    extracflags=--extra-cflags="-Zi"
+    fldr_toolchain=msvc
+    extralinkflags=--extra-ldflags="-DEBUG"
 else
- fftoolchain=
- fldr_toolchain=mingw
- extracflags=
+    fftoolchain=
+    fldr_toolchain=mingw
+    extracflags=
+    extralinkflags="--extra-ldflags=-static-libgcc"
 fi
 
 if test "$build_type" == "release"
@@ -96,14 +100,6 @@ fi
 fld_build_full_path=$fldr_build/ffmpeg-$fldr_toolchain-$flg_output/$build_type
 fld_redist_full_path=$fldr_redist/ffmpeg-$fldr_toolchain-$flg_output/$build_type
 
-if [ "$toolchain" == "msvc" ]
-then
-   extralinkflags=--extra-ldflags="-DEBUG"
-else
-   #extralinkflags=--extra-ldflags='"-static-libgcc -L$fld_build_full_path"'
-   extralinkflags="--extra-ldflags=-static-libgcc --extra-ldflags=-L$fld_build_full_path"
-
-fi
 
 #--------------------------------------------------------
 # trace
@@ -157,6 +153,10 @@ mkdir -p $fld_build_full_path
 
 if [ "$add_x264" = "true" ]
 then
+    fldr_x264_out=$fld_build_full_path/x264
+
+	mkdir -p $fldr_x264_out
+
     if [ "$build_x264" = "true" ]
     then
        echo "+++ x264 start +++"
@@ -169,24 +169,79 @@ then
        if [ "$incremental" = "full" ] || [ "$incremental" = "inc" ]
        then
            make
+
            if [ "$toolchain" == "msvc" ]
            then
               make_def_and_lib_from_dll libx264-152.dll libx264.lib
-              cp $fldr_src_x264/*.lib $fld_build_full_path
-           else
-              #cp $fldr_src_x264/*.a $fld_build_full_path
-              cp $fldr_src_x264/libx264.dll.a $fld_build_full_path/x264.a
-			  cp $fldr_src_x264/libx264.dll.a $fld_build_full_path/libx264.a
            fi
-           mkdir -p $fld_build_full_path/x264
-		   cp $fldr_src_x264/*.h $fld_build_full_path/x264
-           cp $fldr_src_x264/*.dll $fld_build_full_path
        fi
        echo "+++ x264 done +++"
    fi
-   x264_params="--enable-gpl --enable-libx264 --extra-cflags=-I$fld_build_full_path/x264"
+
+   cp $fldr_root/x264/x264.pc  $fldr_mingw/share/pkgconfig
+
+   cp $fldr_root/x264/x264.h           $fldr_x264_out
+   cp $fldr_root/x264/x264_config.h    $fldr_x264_out
+   cp $fldr_src_x264/*.dll             $fldr_x264_out
+
+   if [ "$toolchain" == "msvc" ]
+   then
+       cp $fldr_src_x264/libx264.lib $fldr_x264_out
+       cp $fldr_src_x264/libx264.lib $fldr_x264_out/x264.lib
+       x264_params="--enable-gpl --enable-libx264 --extra-cflags=-I$fldr_x264_out --extra-ldflags=-LIBPATH:$fldr_x264_out"
+    else
+       cp $fldr_src_x264/libx264.dll.a $fldr_x264_out/x264.a
+       cp $fldr_src_x264/libx264.dll.a $fldr_x264_out/libx264.a
+
+       x264_params="--enable-gpl --enable-libx264 --extra-cflags=-I$fldr_x264_out --extra-ldflags=-L$fldr_x264_out"
+    fi
 else
    x264_params=""
+fi
+
+
+#--------------------------------------------------------
+# x265
+#--------------------------------------------------------
+
+if [ "$add_x265" = "true" ]
+then
+    cd $fldr_root
+
+    if [ "$bitness" = "32" ]
+    then
+       fldr_x265_build=$fldr_root/x265/build/vc12-x86
+    else
+       fldr_x265_build=$fldr_root/x265/build/vc12-x86_64
+    fi
+    fldr_x265_bin=$fldr_x265_build/RelWithDebInfo
+
+
+
+    fldr_x265_out=$fld_build_full_path/x265
+
+    mkdir -p $fldr_x265_out
+ 
+	cp $fldr_x265_bin/libx265.lib $fldr_x265_out
+	cp $fldr_x265_bin/libx265.lib $fldr_x265_out/x265.lib
+	cp $fldr_x265_bin/*.dll $fldr_x265_out
+	cp $fldr_x265_bin/*.pdb $fldr_x265_out
+
+	cp $fldr_x265_build/x265_config.h $fldr_x265_out
+	cp $fldr_root/x265/source/x265.h $fldr_x265_out
+
+    cp $fldr_x265_build/x265.pc  $fldr_mingw/share/pkgconfig
+
+
+    if [ "$toolchain" == "msvc" ]
+    then
+        x265_params="--enable-gpl --enable-libx265 --extra-cflags=-I$fldr_x265_out --extra-ldflags=-LIBPATH:$fldr_x265_out"
+    else
+        x265_params="--enable-gpl --enable-libx265 --extra-cflags=-I$fldr_x265_out --extra-ldflags=-L$fldr_x265_out"
+    fi
+
+else
+    x265_params=""
 fi
 
 
@@ -208,7 +263,7 @@ cd $fld_build_full_path
 if [ "$incremental" = "full" ]
 then
     make clean
-   $fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads --enable-avresample $x264_params $debug_flags $extracflags $extralinkflags
+   $fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads --enable-avresample $debug_flags $extracflags $extralinkflags $x264_params $x265_params
 fi
 
 if [ "$incremental" = "full" ] || [ "$incremental" = "inc" ]
