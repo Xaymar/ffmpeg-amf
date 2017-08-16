@@ -56,11 +56,12 @@ Optional to include x265 encoder:
 2. install cmake 2.8.11 or later
 3. run E:\dev\ffmpeg\x265\build\vc12-x86_64\make-solutions.bat
 4. in cmake dialog point to C:\msys64\usr\bin\yasm.exe
-5. Click "Confugure" then "Generate" buttons
-6. Exit the dialog: x265.sln should be generated.
-7. Open x265.sln, select RelWithDebInfo configuration and build x265-shared project with dependencies.
-8. repeat 3-7 for E:\dev\ffmpeg\x265\build\vc12-x86\make-solutions.bat
-9. set add_x265=true in ffmpeg-build-win.sh
+5. in cmake dialog check ENABLE_ASSEMBLY
+6. Click "Confugure" then "Generate" buttons
+7. Exit the dialog: x265.sln should be generated.
+8. Open x265.sln, select RelWithDebInfo configuration and build x265-shared project with dependencies.
+9. repeat 3-7 for E:\dev\ffmpeg\x265\build\vc12-x86\make-solutions.bat
+10. set add_x265=true in ffmpeg-build-win.sh
 
 
 
