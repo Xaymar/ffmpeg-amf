@@ -4,7 +4,7 @@
 
 build_ffmpeg=true
 build_redist=true
-build_x264=false
+build_x264=true
 add_x264=true
 add_x265=true
 
