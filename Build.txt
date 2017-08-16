@@ -79,7 +79,7 @@ Build 32
 Build 64 with VC++
 1. Run 64 bit VC env variable command prompt
 2. Navigate to E:\msys64
-3. Run C:\msys64\
+3. Run C:\msys64\msys2_shell.cmd -mingw64 -use-full-path
 4. Navigate to cd /e/dev/ffmpeg
 5. Run ./ffmpeg-build-win.sh release 64 msvc
 

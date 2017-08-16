@@ -8,7 +8,7 @@ build_x264=false
 add_x264=true
 add_x265=true
 
-
+add_zlib_msvc=true
 
 
 #--------------------------------------------------------
@@ -244,6 +244,28 @@ else
     x265_params=""
 fi
 
+#--------------------------------------------------------
+# add zlib to msvc build
+#--------------------------------------------------------
+
+if [ "$add_zlib_msvc" = "true" ] && [ "$toolchain" == "msvc" ]
+then
+    cd $fldr_root
+    fldr_zlib_out=$fld_build_full_path/zlib
+    mkdir -p $fldr_zlib_out
+
+    cp $fldr_mingw/bin/zlib1.dll $fldr_zlib_out
+    cp $fldr_mingw/include/zlib.h $fldr_zlib_out
+    cp $fldr_mingw/include/zconf.h $fldr_zlib_out
+
+    make_def_and_lib_from_dll $fldr_zlib_out/zlib1.dll $fldr_zlib_out/zlib.lib
+
+    zlib_params="--extra-cflags=-I$fldr_zlib_out --extra-cflags=-DZ_SOLO --extra-ldflags=-LIBPATH:$fldr_zlib_out"
+
+else
+    zlib_params=""
+fi
+
 
 
 #--------------------------------------------------------
@@ -263,7 +285,7 @@ cd $fld_build_full_path
 if [ "$incremental" = "full" ]
 then
     make clean
-   $fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads --enable-avresample $debug_flags $extracflags $extralinkflags $x264_params $x265_params
+   $fldr_src_ffmpeg/configure $fftoolchain --arch=$bld_arch --enable-shared --enable-w32threads --enable-avresample $debug_flags $extracflags $extralinkflags $x264_params $x265_params $zlib_params
 fi
 
 if [ "$incremental" = "full" ] || [ "$incremental" = "inc" ]
