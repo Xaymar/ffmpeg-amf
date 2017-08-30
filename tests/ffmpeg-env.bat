@@ -3,9 +3,9 @@ SET "FFMPEG_DIR=%~dp0..\redist\ffmpeg-msvc-x64\release\bin\"
 SET "FFMPEG=%FFMPEG_DIR%ffmpeg.exe"
 SET "FFPROBE=%FFMPEG_DIR%ffprobe.exe"
 
-SET INPUT="%CWD%raw\Unreal Engine Elemental Demo 1080p60_%%04d.png"
-SET "OPT_INPUT=-f image2 -framerate 60/1 -c:v png -i %INPUT%"
-SET "OPT_COMMON=-framerate 60/1 -an -g 120 -pix_fmt yuv420p"
+SET "INPUT=%CWD%raw\Unreal Engine Elemental Demo 1080p60_%%04d.png"
+SET "OPT_INPUT=-f image2 -framerate 60/1 -c:v png"
+SET "OPT_COMMON=-framerate 60/1 -an -g 120 -pix_fmt yuv420p -flags loop -y"
  REM -v debug"
 
 :: Bitrates to test

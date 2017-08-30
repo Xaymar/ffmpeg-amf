@@ -11,10 +11,9 @@ MKDIR out\%ENCODER%
 
 FOR /L %%i IN (1,1,%BITRATE#%) DO (
 	FOR %%p IN (%QVALS%) DO (
-		"%FFMPEG%" %OPT_INPUT% %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq false -preanalysis false -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p.mp4"
-		"%FFMPEG%" %OPT_INPUT% %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq false -preanalysis true -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-p.mp4"
-		"%FFMPEG%" %OPT_INPUT% %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq true -preanalysis false -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-v.mp4"
-		"%FFMPEG%" %OPT_INPUT% %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq true -preanalysis true -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-pv.mp4"
+		"%FFMPEG%" %OPT_INPUT% -i "%INPUT%" %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq false -preanalysis false -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p.mp4"
+		"%FFMPEG%" %OPT_INPUT% -i "%INPUT%" %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq false -preanalysis true -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-p.mp4"
+		"%FFMPEG%" %OPT_INPUT% -i "%INPUT%" %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq true -preanalysis false -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-v.mp4"
+		"%FFMPEG%" %OPT_INPUT% -i "%INPUT%" %OPT_COMMON% -vcodec %ENCODER% %OPTS% -quality %%p -vbaq true -preanalysis true -rc cbr -b:v !BITRATE[%%i]! -bufsize !BITRATE[%%i]! "out\%ENCODER%\!BITRATE[%%i]!-%%p-pv.mp4"
 	)
 )
-PAUSE
