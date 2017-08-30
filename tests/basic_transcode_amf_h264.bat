@@ -9,11 +9,13 @@ SET bitrate=5M
 SET maxbitrate=6M
 SET bufsize=2M
 SET x264_preset=veryfast
+SET amf_quality=speed
+
 
 rem veryfast and zerolatency options make x264 comparable with VCE
 
 
-"%CWD%\..\bin\ffmpeg.exe" -y -t 100 -threads 0 -i "%~1" -c:v h264_amf  -b:v %bitrate% -maxrate %maxbitrate% -bufsize %bufsize% -rc vbr_peak                   out_amf_h264.mp4
+"%CWD%\..\bin\ffmpeg.exe" -y -t 100 -threads 0 -i "%~1" -c:v h264_amf  -b:v %bitrate% -maxrate %maxbitrate% -bufsize %bufsize% -rc vbr_peak -quality %amf_quality% out_amf_h264.mp4
 "%CWD%\..\bin\ffmpeg.exe" -y -t 100 -threads 0 -i "%~1" -c:v libx264   -b:v %bitrate% -maxrate %maxbitrate% -bufsize %bufsize% -preset %x264_preset% -nal-hrd vbr -tune zerolatency out_x264_h264.mp4
 
 echo PSNR > result.txt	
