@@ -6,7 +6,7 @@ build_ffmpeg=true
 build_redist=true
 build_x264=true
 add_x264=true
-add_x265=true
+add_x265=false
 
 add_zlib_msvc=true
 
@@ -333,6 +333,13 @@ find ./ -name "*.pdb" -type f -exec cp {}  $fldr_bin \;
 find ./ -name "*.lib" -type f -exec cp {}  $fldr_lib \;
 cd $fld_build_full_path
 find ./ -type f -name "*.h" -exec cp --parents {}  $fldr_include/"$name" \;
+
+if [ "$toolchain" != "msvc" ]
+then
+  cp `which libbz2-1.dll` $fldr_bin
+  cp `which libiconv-2.dll` $fldr_bin;
+  cp `which liblzma-5.dll` $fldr_bin;
+fi
 
 fi # build_redist=true
 
